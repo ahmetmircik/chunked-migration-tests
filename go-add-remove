@@ -34,6 +34,7 @@ for i in {1..5} ; do
   hz driver Member.*AA
   hz run shutDown
   hz cluster -ee -size M1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+  hz driver Member.*AA
   hz run untilClusterSafe
   sleep 60
 done

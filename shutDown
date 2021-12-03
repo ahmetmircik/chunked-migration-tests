@@ -1,0 +1,4 @@
+shutdown@class=hzcmd.ops.ShutDown
+shutdown@duration=600
+shutdown@threads=1
+shutdown@bench=No

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -e
+
+hzVersion=${1:-$(hazelcastVersion)}
+user=${2:-ec2-user}
+
+aws-create --count 5 --instanceType m6g.16xlarge
+
+ops="$ops -Dhazelcast.enterprise.license.key=${HAZELCAST_EE_KEY}"
+ops="$ops -Dhazelcast.partition.count=101"
+ops="$ops -Dhazelcast.partition.max.parallel.migrations=5"
+ops="$ops -Dhazelcast.partition.migration.chunks.enabled=true"
+ops="$ops -Dhazelcast.partition.migration.chunks.max.migrating.data.in.mb=50"
+ops="$ops -ea"
+
+mOps="$mOps -Dlog4j.configuration=file:./log4j.properties -Dhazelcast.logging.type=log4j"
+
+hz memberOps "-Xms1G -Xmx1G ${ops} ${mOps}"
+
+echo "starting first member"
+hz cluster -ee -size M1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+
+echo "loading data"
+hz driver Member
+hz run multiLoad
+
+echo "starting next 4 members"
+hz cluster -ee -size M4 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+
+hz run untilClusterSize5 untilClusterSafe
+
+for i in {1..5} ; do
+  hz driver Member.*AA
+  hz run shutDown
+  hz cluster -ee -size M1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+  hz run untilClusterSafe
+  sleep 60
+done
+
+hz download
+hz wipe
+
+aws-terminate

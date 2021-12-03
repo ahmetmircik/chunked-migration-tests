@@ -1,0 +1,7 @@
+multi-load@class=hzcmd.map.member.multi.MultiLoad
+multi-load@driver=Member
+multi-load@count=1
+multi-load@sizeInMB=102400
+multi-load@valueSize=1024
+multi-load@keyDomain=1000
+multi-load@name=mapBak1HD

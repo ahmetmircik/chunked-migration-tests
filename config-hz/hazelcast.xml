@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><hazelcast xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hazelcast.com/schema/config                                http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd">
+
+    <properties>
+        <property name="hazelcast.phone.home.enabled">false</property>
+    </properties>
+
+    <advanced-network enabled="true">
+        <join>
+            <multicast enabled="false"/>
+            <tcp-ip enabled="true">
+            </tcp-ip>
+        </join>
+
+        <member-server-socket-endpoint-config name="memberServerEndPointConfig">
+            <port auto-increment="true" port-count="100">4701</port>
+        </member-server-socket-endpoint-config>
+
+        <client-server-socket-endpoint-config name="clientServerEndPointConfig">
+            <port auto-increment="true" port-count="100">5701</port>
+        </client-server-socket-endpoint-config>
+    </advanced-network>
+
+    <native-memory allocator-type="POOLED" enabled="true">
+        <size unit="GIGABYTES" value="120"/>
+    </native-memory>
+
+
+    <map name="mapBak1Bin*">
+        <in-memory-format>BINARY</in-memory-format>
+        <backup-count>1</backup-count>
+    </map>
+
+   <map name="mapBak1HD*">
+        <in-memory-format>NATIVE</in-memory-format>				
+        <backup-count>0</backup-count>
+   </map>
+</hazelcast>

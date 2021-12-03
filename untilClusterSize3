@@ -1,0 +1,4 @@
+untilCluster3@class=hzcmd.ops.UntilClusterSize
+untilCluster3@driver=Member
+untilCluster3@duration=600
+untilCluster3@size=3

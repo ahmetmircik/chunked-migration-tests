@@ -35,6 +35,7 @@ sleep 20
 echo "starting next 4 members"
 hz cluster -ee -size M4 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
 
+hz driver Member1
 hz run untilClusterSize5 untilClusterSafe
 
 for i in {2..5} ; do

@@ -25,13 +25,8 @@
     </native-memory>
 
 
-    <map name="mapBak1Bin*">
-        <in-memory-format>BINARY</in-memory-format>
-        <backup-count>1</backup-count>
-    </map>
-
    <map name="mapBak1HD*">
         <in-memory-format>NATIVE</in-memory-format>				
-        <backup-count>0</backup-count>
+        <backup-count>1</backup-count>
    </map>
 </hazelcast>

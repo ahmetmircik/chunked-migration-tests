@@ -1,6 +1,6 @@
-multi-load@class=hzcmd.map.member.multi.MultiLoad
-multi-load@driver=Member
-multi-load@count=10
-multi-load@sizeInMB=102400
-multi-load@valueSize=1024
-multi-load@name=mapBak1HD
+multiLoad@class=hzcmd.map.member.multi.MultiLoad
+multiLoad@driver=Member
+multiLoad@count=10
+multiLoad@sizeInMB=102400
+multiLoad@valueSize=1024
+multiLoad@name=mapBak1HD

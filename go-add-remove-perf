@@ -31,7 +31,7 @@ hz ignore com.hazelcast.spi.exception.RetryableHazelcastException:com.hazelcast.
 hz driver Client
 hz run multiGet &
 hz run multiSet &
-sleep 20
+sleep 60
 
 echo "starting next 4 members"
 hz cluster -ee -size M4 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
@@ -48,7 +48,7 @@ for i in {2..5} ; do
   hz driver Member1
   hz run untilClusterSafe
 
-  sleep 20
+  sleep 60
 done
 
 hz download

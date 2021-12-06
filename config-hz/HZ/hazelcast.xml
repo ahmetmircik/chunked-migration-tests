@@ -2,13 +2,13 @@
 
     <properties>
         <property name="hazelcast.phone.home.enabled">false</property>
-    <property name="hz.jet.enabled">true</property></properties>
+    </properties>
 
     <advanced-network enabled="true">
         <join>
             <multicast enabled="false"/>
             <tcp-ip enabled="true">
-            <member>10.0.0.215</member><member>10.0.0.89</member><member>10.0.0.34</member></tcp-ip>
+            </tcp-ip>
         </join>
 
         <member-server-socket-endpoint-config name="memberServerEndPointConfig">
@@ -25,13 +25,8 @@
     </native-memory>
 
 
-    <map name="mapBak1Bin*">
-        <in-memory-format>BINARY</in-memory-format>
+    <map name="mapBak1HD*">
+        <in-memory-format>NATIVE</in-memory-format>
         <backup-count>1</backup-count>
     </map>
-
-   <map name="mapBak1HD*">
-        <in-memory-format>NATIVE</in-memory-format>				
-        <backup-count>0</backup-count>
-   </map>
-<cluster-name>HZ</cluster-name></hazelcast>
+</hazelcast>

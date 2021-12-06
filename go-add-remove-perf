@@ -53,10 +53,8 @@ done
 
 hz download
 
-outdir=plot-${hzVersion}
-hz-plot ${outdir}
+hz-plot output
 
 hz wipe
-hz clean
 
 aws-terminate

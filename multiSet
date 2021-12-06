@@ -1,0 +1,7 @@
+setMulti@class=hzcmd.map.multi.Set
+setMulti@threads=2
+setMulti@count=10
+setMulti@keyDomain=10000000
+setMulti@valueMinSize=16
+setMulti@valueMaxSize=1024
+setMulti@name=mapBak1HD

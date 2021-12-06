@@ -1,0 +1,5 @@
+get@class=hzcmd.map.multi.Get
+get@threads=8
+get@keyDomain=10000000
+get@count=10
+get@name=mapBak1HD

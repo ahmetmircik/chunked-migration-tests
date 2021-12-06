@@ -1,7 +1,0 @@
-load@class=hzcmd.map.loader.LoaderQuickApprox
-load@keyDomain=1000000
-load@valueSize=1
-load@threads=10
-load@name=mapBak1Bin
-load@bench=No
-

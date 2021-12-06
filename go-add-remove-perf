@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+set -e
+
+hzVersion=${1:-$(hazelcastVersion)}
+user=${2:-ec2-user}
+
+aws-create --count 5 --instanceType m6g.16xlarge
+
+ops="$ops -Dhazelcast.enterprise.license.key=${HAZELCAST_EE_KEY}"
+ops="$ops -Dhazelcast.partition.count=101"
+ops="$ops -Dhazelcast.partition.max.parallel.migrations=5"
+ops="$ops -Dhazelcast.partition.migration.chunks.enabled=true"
+ops="$ops -Dhazelcast.partition.migration.chunks.max.migrating.data.in.mb=50"
+ops="$ops -ea"
+
+mOps="$mOps -Dlog4j.configuration=file:./log4j.properties -Dhazelcast.logging.type=log4j"
+
+hz memberOps "-Xms3G -Xmx3G ${ops} ${mOps}"
+
+echo "starting first member"
+hz cluster -ee -size M1C1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+
+echo "loading data"
+hz driver Member
+hz run multiLoad
+
+echo "Doing get-set(80%-20%) operations for 60 seconds"
+hz ignore com.hazelcast.spi.exception.RetryableHazelcastException:com.hazelcast.core.OperationTimeoutException:com.hazelcast.spi.exception.TargetDisconnectedException:com.hazelcast.spi.exception.TargetNotMemberException:java.lang.IllegalStateException:com.hazelcast.core.HazelcastInstanceNotActiveException
+hz driver Client
+hz run multiGet &
+hz run multiSet &
+sleep 20
+
+echo "starting next 4 members"
+hz cluster -ee -size M4 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+
+hz run untilClusterSize5 untilClusterSafe
+
+for i in {2..5} ; do
+  hz driver Member${i}
+  hz run shutDown
+
+  hz cluster -ee -size M1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+
+  hz driver Member1
+  hz run untilClusterSafe
+
+  sleep 20
+done
+
+hz download
+
+outdir=plot-${hzVersion}
+hz-plot ${outdir}
+
+hz wipe
+hz clean
+
+aws-terminate

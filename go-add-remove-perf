@@ -55,6 +55,9 @@ hz download
 
 hz-plot output
 
+chartAll-JavaMetrics output &> /dev/null
+gcViewer &> /dev/null
+
 hz wipe
 
 aws-terminate

@@ -24,14 +24,14 @@ hz cluster -ee -size M1C1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -up
 
 echo "loading data"
 hz driver Member
-#hz run multiLoad
+hz run multiLoad
 
 echo "Doing get-set(80%-20%) operations for 60 seconds"
 hz ignore com.hazelcast.spi.exception.RetryableHazelcastException:com.hazelcast.core.OperationTimeoutException:com.hazelcast.spi.exception.TargetDisconnectedException:com.hazelcast.spi.exception.TargetNotMemberException:java.lang.IllegalStateException:com.hazelcast.core.HazelcastInstanceNotActiveException
 hz driver Client
 hz run multiGet &
 hz run multiSet &
-sleep 10
+sleep 60
 
 echo "starting next 4 members"
 hz cluster -ee -size M4 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
@@ -39,25 +39,23 @@ hz cluster -ee -size M4 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcw
 hz driver Member1
 hz run untilClusterSize5 untilClusterSafe
 
-#for i in {2..5} ; do
-#  hz driver Member${i}
-#  hz run shutDown
-#
-#  hz cluster -ee -size M1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
-#
-#  hz driver Member1
-#  hz run untilClusterSafe
-#
-#  sleep 60
-#done
+for i in {2..5} ; do
+  hz driver Member${i}
+  hz run shutDown
+
+  hz cluster -ee -size M1 -tag AA -v ${hzVersion} -boxes a.box -user ${user} -upcwd log4j.properties
+
+  hz driver Member1
+  hz run untilClusterSafe
+
+  sleep 60
+done
 
 hz download
 
 hz-plot output
 
-#chartAll-JavaMetrics output &> /dev/null
-#gcViewer &> /dev/null
-hz-viewGc > gc.html
+gcViewer &> /dev/null
 
 hz wipe
 
